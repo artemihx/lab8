@@ -1,0 +1,51 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:cafeapp1.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:conv="using:cafeapp1.Converters"
+        mc:Ignorable="d" Width="800" Height="450"
+        x:Class="cafeapp1.Views.EmployeeWindow"
+        x:DataType="vm:EmployeeWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Сотрудник">
+    <Window.Resources>
+        <conv:AvatarConverter x:Key="AvatarConverter" />
+        <conv:ChangeConverter x:Key="ChangeConverter" />
+    </Window.Resources>
+    <StackPanel Orientation="Horizontal">
+                <StackPanel>
+                        <TextBlock Text="{Binding SelectedEmployee, Converter={StaticResource ChangeConverter}}"></TextBlock>
+                        <Panel Margin="25">
+                                <Image Source="{Binding SelectedEmployee.Photo, Converter={StaticResource AvatarConverter}}" Width="200" Height="200" Margin="10" />
+                        </Panel>
+                        <TextBlock Text="{Binding SelectedEmployee.Photo, Converter={StaticResource AvatarConverter}}"></TextBlock>
+                        <Button Content="Загрузить фотографию" Command="{Binding UploadPhotoCommand}" />
+                        <Button Content="Изменить данные" Command="{Binding SaveCommand}"/>
+                </StackPanel>
+                <StackPanel Margin="10">
+                        <TextBlock Text="ФИО:" />
+                        <TextBox Text="{Binding SelectedEmployee.Fname, Mode=TwoWay}" Margin="5" />
+                        <TextBox Text="{Binding SelectedEmployee.Lname, Mode=TwoWay}" Margin="5"/>
+                        <TextBox Text="{Binding SelectedEmployee.Mname, Mode=TwoWay}" Margin="5"/>
+                </StackPanel>
+                <StackPanel Margin="10">
+                        <TextBlock Text="Логин:" Margin="5"/>
+                        <TextBox Text="{Binding SelectedEmployee.Login, Mode=TwoWay}" Margin="5"/>
+                        <TextBlock Text="Пароль:" Margin="5"/>
+                        <TextBox Text="{Binding SelectedEmployee.Password, Mode=TwoWay}" Margin="5"/>
+                        <TextBlock Text="Должность:" Margin="5"></TextBlock>
+                        <ComboBox ItemsSource="{Binding Roles}" SelectedItem="{Binding SelectedRole}">
+                                <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                                <TextBlock Text="{Binding Name}"></TextBlock>
+                                        </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                        </ComboBox>
+                </StackPanel>
+                <StackPanel Margin="10">
+                        <TextBlock Text="Документ с подписью:" Margin="5"/>
+                        <TextBox Text="{Binding SelectedEmployee.Doc, Mode=TwoWay}" Margin="5" />
+                </StackPanel>
+                </StackPanel>
+</Window>

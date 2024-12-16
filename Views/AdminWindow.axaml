@@ -1,0 +1,123 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:cafeapp1.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:conv="using:cafeapp1.Converters"
+        mc:Ignorable="d" Width="800" Height="500"
+        x:Class="cafeapp1.Views.AdminWindow"
+        x:DataType="vm:AdminWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Админ">
+    <Window.Resources>
+        <conv:AvatarConverter x:Key="AvatarConverter" />
+        <conv:ChangeConverter x:Key="ChangeConverter" />
+        <conv:StatusEmployeeConverter x:Key="StatusEmployeeConverter"/>
+        <conv:StatusShiftConverter x:Key="StatusShiftConverter"/>
+    </Window.Resources>
+    <TabControl>
+        <TabItem Header="Карточка сотрудника">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel>
+                    <TextBlock Text="{Binding CurrentUser, Converter={StaticResource ChangeConverter}}"></TextBlock>
+                    <Panel Margin="25">
+                        <Image Source="{Binding CurrentUser.Photo, Converter={StaticResource AvatarConverter}}" Width="200" Height="200" Margin="10" />
+                    </Panel>
+                    <Button Content="Загрузить фотографию" Command="{Binding UploadPhotoCommand}" />
+                    <Button Content="Изменить данные" Command="{Binding EditDataCommand}"/>
+                </StackPanel>
+                <StackPanel Margin="10">
+                    <TextBlock Text="ФИО:" />
+                    <TextBox Text="{Binding CurrentUser.Fname, Mode=TwoWay}" Margin="5" />
+                    <TextBox Text="{Binding CurrentUser.Lname, Mode=TwoWay}" Margin="5"/>
+                    <TextBox Text="{Binding CurrentUser.Mname, Mode=TwoWay}" Margin="5"/>
+                </StackPanel>
+                <StackPanel Margin="10">
+                    <TextBlock Text="Логин:" Margin="5"/>
+                    <TextBox Text="{Binding CurrentUser.Login, Mode=TwoWay}" Margin="5"/>
+                    <TextBlock Text="Пароль:" Margin="5"/>
+                    <TextBox Text="{Binding CurrentUser.Password, Mode=TwoWay}" Margin="5"/>
+                    <TextBlock Text="Должность"></TextBlock>
+                    <TextBlock Text="{Binding CurrentUser.Role.Name}"></TextBlock>
+                </StackPanel>
+                <StackPanel Margin="10">
+                    <TextBlock Text="Документ с подписью:" Margin="5"/>
+                    <TextBox Text="{Binding CurrentUser.Doc, Mode=TwoWay}" Margin="5" />
+                </StackPanel>
+            </StackPanel>
+        </TabItem>
+        <TabItem Header="Сотрудники">
+            <ScrollViewer>
+                <StackPanel>
+                    <Button Content="Добавить" Command="{Binding AddCommand}" Margin="10"/>
+                    <Button Content="Редактировать" Command="{Binding EditEmployeeCommand}" Margin="10"/>
+                    <Button Content="Удалить" Command="{Binding DeleteEmployeeCommand}" Margin="10"></Button>
+                    <Button Content="Уволить/Вернуть" Command="{Binding FireOrAcceptCommand}" Margin="10"></Button>
+                    <ListBox ItemsSource="{Binding Employees}" SelectedItem="{Binding SelectedEmployee}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Vertical" Margin="5">
+                                    <Image Source="{Binding Photo ,Converter={StaticResource AvatarConverter}}" Width="150" Height="150" />
+                                    <TextBlock Text="{Binding Fname}"/>
+                                    <TextBlock Text="{Binding Lname} "/>
+                                    <TextBlock Text="{Binding Role.Name}"></TextBlock>
+                                    <TextBlock Text="{Binding Converter={StaticResource StatusEmployeeConverter}}"></TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
+            </ScrollViewer>
+        </TabItem>
+        <TabItem Header="Смены">
+            <StackPanel>
+                <TextBlock Text="{Binding ErrorMessage}" Foreground="Red"></TextBlock>
+                <TextBlock Text="Текущая смена:" />
+                <TextBlock Text="{Binding CurrentShift.Date, StringFormat='dd.MM.yyyy'}" />
+                <TextBlock Text="Все смены:" />
+                <ListBox ItemsSource="{Binding Shifts}" SelectedItem="{Binding SelectedShift}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical" Margin="5">
+                                <TextBlock Text="{Binding Date, StringFormat='dd.MM.yyyy'}" />
+                                <TextBlock Text="{Binding Status, Converter={StaticResource StatusShiftConverter}}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <Button Content="Открыть/Закрыть смену" Command="{Binding ToggleShiftCommand}" />
+                <Button Content="Добавить смену" Command="{Binding AddShiftCommand}" />
+                <Button Content="Редактировать смену" Command="{Binding EditShiftCommand}" />
+                <Button Content="Удалить смену" Command="{Binding DeleteShiftCommand}" />
+                <Button Content="Назначить столы" Command="{Binding AssignTablesCommand}" />
+            </StackPanel>
+        </TabItem>
+        <TabItem Header="Заказы">
+            <StackPanel>
+                <TextBlock FontSize="24" Foreground="Red" Text="{Binding ErrorMessage}"></TextBlock>
+                <TextBlock Text="Заказы текущей смены:" Margin="10"/>
+                <ListBox ItemsSource="{Binding CurrentShiftOrders}" SelectedItem="{Binding SelectedOrder}" Margin="10">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock>
+                                    <Run Text="Столик: " />
+                                    <Run Text="{Binding Order.Tableid}"></Run>
+                                </TextBlock>
+                                <TextBlock Text="{Binding Order.Date, StringFormat='dd.MM.yyyy HH:mm'}" />
+                                <TextBlock Text="{Binding Order.StatusNavigation.Name}" />
+                                <TextBlock FontSize="12" Foreground="Gray">
+                                    <Run Text="Блюда: " />
+                                    <Run Text="{Binding FoodsInOrder}" />
+                                </TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <Button Content="Редактировать заказ" Command="{Binding EditOrderCommand}" Margin="10"/>
+                <Button Content="Изменить статус заказа" Command="{Binding ChangeOrderStatusCommand}" Margin="10"/>
+                <Button Content="Создать отчет по смене" Command="{Binding GenerateShiftReportCommand}" Margin="10"/>
+            </StackPanel>
+        </TabItem>
+    </TabControl>
+</Window>

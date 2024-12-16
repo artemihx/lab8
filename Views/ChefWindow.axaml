@@ -1,0 +1,63 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:cafeapp1.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" Width="800" Height="600"
+        xmlns:conv="using:cafeapp1.Converters"
+        x:Class="cafeapp1.Views.ChefWindow"
+        x:DataType="vm:ChefWindowViewModel"
+        Title="Окно Повара">
+    <Window.Resources>
+        <conv:AvatarConverter x:Key="AvatarConverter" />
+    </Window.Resources>
+    <TabControl>
+        <TabItem Header="Карточка сотрудника">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel>
+                    <Panel Margin="25">
+                        <Image Source="{Binding CurrentUser.Photo, Converter={StaticResource AvatarConverter}}" Width="200" Height="200" Margin="10" />
+                    </Panel>
+                </StackPanel>
+                <StackPanel Margin="10">
+                    <TextBlock Text="ФИО:" />
+                    <TextBlock Text="{Binding CurrentUser.Fname, Mode=TwoWay}" Margin="5" />
+                    <TextBlock Text="{Binding CurrentUser.Lname, Mode=TwoWay}" Margin="5"/>
+                    <TextBlock Text="{Binding CurrentUser.Mname, Mode=TwoWay}" Margin="5"/>
+                </StackPanel>
+                <StackPanel Margin="10">
+                    <TextBlock Text="Логин:" Margin="5"/>
+                    <TextBlock Text="{Binding CurrentUser.Login, Mode=TwoWay}" Margin="5"/>
+                </StackPanel>
+                <StackPanel Margin="10">
+                    <TextBlock Text="Документ с подписью:" Margin="5"/>
+                </StackPanel>
+            </StackPanel>
+        </TabItem>
+        <TabItem Header="Заказы">
+            <StackPanel>
+                <TextBlock FontSize="24" Foreground="Red" Text="{Binding ErrorMessage}"></TextBlock>
+                <TextBlock Text="Заказы текущей смены:" Margin="10"/>
+                <ListBox ItemsSource="{Binding CurrentShiftOrders}" SelectedItem="{Binding SelectedOrder}" Margin="10">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock>
+                                    <Run Text="Столик: " />
+                                    <Run Text="{Binding Order.Tableid}"></Run>
+                                </TextBlock>
+                                <TextBlock Text="{Binding Order.Date, StringFormat='dd.MM.yyyy HH:mm'}" />
+                                <TextBlock Text="{Binding Order.StatusNavigation.Name}" />
+                                <TextBlock FontSize="12" Foreground="Gray">
+                                    <Run Text="Блюда: " />
+                                    <Run Text="{Binding FoodsInOrder}" />
+                                </TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <Button Content="Изменить статус заказа" Command="{Binding ChangeOrderStatusCommand}" Margin="10"/>
+            </StackPanel>
+        </TabItem>
+    </TabControl>
+</Window>

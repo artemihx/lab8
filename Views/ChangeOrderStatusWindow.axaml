@@ -1,0 +1,22 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:cafeapp1.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" Width="200" Height="200"
+        x:Class="cafeapp1.Views.ChangeOrderStatusWindow"
+        x:DataType="vm:ChangeOrderStatusWindowViewModel"
+        Title="Изменить статус заказа">
+    <StackPanel>
+        <TextBlock Text="Статус заказа:" Margin="10"/>
+        <ComboBox ItemsSource="{Binding OrderStatuses}" SelectedItem="{Binding Order.StatusNavigation, Mode=TwoWay}" Margin="10">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        
+        <Button Content="Сохранить" Command="{Binding SaveOrderCommand}" Margin="10"/>
+    </StackPanel>
+</Window>
