@@ -65,7 +65,7 @@ namespace cafeapp1.ViewModels
         private void LoadCurrentShiftOrders()
         {
             var currentShift = Service.GetContext().Shifts.FirstOrDefault(s => s.Status == true);
-            if (currentShift != null && currentShift.Workersonshifts.Where(w => w.Workerid == CurrentUser.Id) != null)
+            if (currentShift != null && Service.GetContext().Workersonshifts.Where(w => w.Workerid == CurrentUser.Id && currentShift.Id == w.Shiftid).FirstOrDefault() != null)
             {
                 var orders = Service.GetContext().Orders.Include(o => o.StatusNavigation)
                     .Where(o => o.Shiftid == currentShift.Id).ToList();

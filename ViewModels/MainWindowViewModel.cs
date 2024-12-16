@@ -44,7 +44,8 @@ public partial class MainWindowViewModel() : ViewModelBase
 
     private void Login()
     {
-        var user = Service.GetContext().Users.Where(u => u.Login == Username).FirstOrDefault();
+        var user = Service.GetContext().Users.Include(u => u.Role)
+            .Where(u => u.Login == Username).FirstOrDefault();
         if (user != null)
         {
             if (user.Password == Password)

@@ -77,8 +77,8 @@ create table foodOnOrders
 INSERT INTO roles (id,name) VALUES (2,'Официант'), (3,'Повар'), (1,'Админ');
 
 INSERT INTO users (id ,login, password, fname, lname, mname, doc, roleId, status) VALUES
-(1,'waiter1', 'waiterpass', 'Иван', 'Иванов', 'Иванович', 'doc1.pdf', 3, TRUE),
-(2,'cooker1', 'cookerpass', 'Петр', 'Петров', 'Петрович',  'doc2.pdf', 2, TRUE),
+(1,'waiter1', 'waiterpass', 'Иван', 'Иванов', 'Иванович', 'doc1.pdf', 2, TRUE),
+(2,'cooker1', 'cookerpass', 'Петр', 'Петров', 'Петрович',  'doc2.pdf', 3, TRUE),
 (3,'admin1', 'adminpass', 'Алексей', 'Алексеев', 'Алексеевич', 'doc3.pdf', 1, TRUE);
 
 INSERT INTO foods (name, price) VALUES

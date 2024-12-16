@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
+using Avalonia.Platform;
 using cafeapp1.Models;
 using cafeapp1.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -30,6 +31,11 @@ namespace cafeapp1.ViewModels
         private OrderViewModel _selectedOrder;
         private string _errorMessage;
         private string _photo;
+        public string Photo
+        {
+            get => _photo;
+            set => SetProperty(ref _photo, value);
+        }
         public string ErrorMessage
         {
             get => _errorMessage;
@@ -117,20 +123,7 @@ namespace cafeapp1.ViewModels
                 ErrorMessage = "Нет активной смены!";
             }
         }
-
-        public IRelayCommand SaveUserCommand => new RelayCommand(SaveUser);
-
-        private void SaveUser()
-        {
-            Service.GetContext().SaveChanges();
-        }
-
-        public IRelayCommand SaveEmployeeCommand => new RelayCommand(SaveEmployee);
-
-        private void SaveEmployee()
-        {
-            Service.GetContext().SaveChanges();
-        }
+        
 
         public AsyncRelayCommand UploadPhotoCommand => new AsyncRelayCommand(UploadPhoto);
 
@@ -146,12 +139,18 @@ namespace cafeapp1.ViewModels
                 var fileName = Path.GetFileName(selectedFile);
                 var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
                 var directoryPath = Path.Combine(baseDirectory + "/../../../Assets/users-photo/");
-                
                 var destinationPath = Path.Combine(directoryPath, fileName);
-                File.Copy(selectedFile, destinationPath, true);
-
-                _photo = fileName;
-                CurrentUser.Photo = _photo;
+                await Task.Run(() => File.Copy(selectedFile, destinationPath, true));  
+                await Service.WaitForFileToAppear(destinationPath);
+                Photo = fileName;
+                CurrentUser.Photo = Photo;
+                Service.GetContext().Users.Update(CurrentUser);
+                await Task.Run((() => Service.GetContext().SaveChanges()));
+                OnPropertyChanged(nameof(Photo));
+                var window = new AdminWindow();
+                window.DataContext = new AdminWindowViewModel(window, CurrentUser);
+                window.Show();
+                _currentWindow.Close();
             }
         }
 

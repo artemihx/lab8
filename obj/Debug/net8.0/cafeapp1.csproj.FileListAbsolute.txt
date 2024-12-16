@@ -184,3 +184,4 @@
 /home/artemih/RiderProjects/cafeapp1/cafeapp1/bin/Debug/net8.0/System.Security.Cryptography.Pkcs.dll
 /home/artemih/RiderProjects/cafeapp1/cafeapp1/bin/Debug/net8.0/runtimes/win/lib/net8.0/Microsoft.Win32.SystemEvents.dll
 /home/artemih/RiderProjects/cafeapp1/cafeapp1/bin/Debug/net8.0/runtimes/win/lib/net8.0/System.Security.Cryptography.Pkcs.dll
+/home/artemih/RiderProjects/cafeapp1/cafeapp1/obj/Debug/net8.0/cafeapp1.sourcelink.json
