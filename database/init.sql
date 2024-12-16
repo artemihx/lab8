@@ -95,4 +95,4 @@ INSERT INTO foods (name, price) VALUES
 
 INSERT INTO orderStatus (name) VALUES ('Ожидает'), ('Готовится'), ('Готов'), ('Оплачен'), ('Отменен');
 
-INSERT INTO table (id) VALUES (1), (2), (3), (4), (5);
+INSERT INTO tables (id) VALUES (1), (2), (3), (4), (5);
